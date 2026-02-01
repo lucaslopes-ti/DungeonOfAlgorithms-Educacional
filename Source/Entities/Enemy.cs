@@ -55,7 +55,7 @@ public class Enemy : IGameEntity
     private SpriteEffects _flipEffect = SpriteEffects.None;
     
     // ═══════════════════════════════════════════════════════════════════════════
-    // 🧭 ESTADO
+    // STATE
     // ═══════════════════════════════════════════════════════════════════════════
     
     /// <summary>Direções que o inimigo pode olhar</summary>
@@ -119,10 +119,10 @@ public class Enemy : IGameEntity
         // Guarda posição anterior (pra reverter se bater na parede)
         Vector2 prevPos = Position;
         
-        // 🧠 Executa o comportamento (Strategy Pattern em ação!)
+        // Executa o comportamento (Strategy Pattern em ação!)
         _behavior.Update(this, player, gameTime);
         
-        // 🧱 Verifica colisão com paredes - reverte se bateu
+        // Verifica colisão com paredes - reverte se bateu
         if (tilemap != null && tilemap.IsColliding(Bounds))
         {
             Position = prevPos; // "Ops, parede! Volta!"

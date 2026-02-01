@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// 🧱 TILEMAP - O Chão que Você Pisa (ou Não)
+// TILEMAP - O Chão que Você Pisa (ou Não)
 // ═══════════════════════════════════════════════════════════════════════════════
 // Estrutura de Dados: ARRAY 2D (int[,])
 // Cada número representa um tile diferente. É tipo Minecraft, mas 2D.
@@ -34,7 +34,7 @@ public class Tilemap
     private readonly int _tilesPerRow;
     
     /// <summary>
-    /// 🧱 Tiles sólidos - índices que representam paredes/obstáculos.
+    /// Tiles sólidos - índices que representam paredes/obstáculos.
     /// Se o tile está nessa lista, você NÃO PASSA!
     /// HashSet pra busca O(1) - performance importa!
     /// </summary>
@@ -48,7 +48,7 @@ public class Tilemap
         172, 173, 174         // Objetos sólidos
     };
     
-    // 🚪 Índices das portas - tiles que ativam transição de sala
+    // Índices das portas - tiles que ativam transição de sala
     public static readonly int DoorEast = 99;
     public static readonly int DoorWest = 98;
     public static readonly int DoorNorth = 97;

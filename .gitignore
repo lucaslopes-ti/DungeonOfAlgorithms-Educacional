@@ -1,0 +1,45 @@
+# Build Results
+bin/
+obj/
+.vs/
+
+# Visual Studio
+.vscode/
+*.sln.DotSettings
+*.user
+*.userosscache
+*.sln.iml
+
+# MonoGame
+Content/bin/
+Content/obj/
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# NuGet
+.nuget/
+packages/
+*.nupkg
+*.snupkg
+
+# Build outputs
+*.dll
+*.exe
+*.out
+
+# Runtime
+*.log
+*.db
+
+# Backups
+**/Backup/
+*.bak
+*.backup

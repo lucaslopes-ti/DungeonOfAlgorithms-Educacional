@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DungeonOfAlgorithms")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4097bc741bd1b318784951e3c8de7f0b37948060")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e9e251dce306c3fdc2b1148a74afdd21bbc52466")]
 [assembly: System.Reflection.AssemblyProductAttribute("DungeonOfAlgorithms")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DungeonOfAlgorithms")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

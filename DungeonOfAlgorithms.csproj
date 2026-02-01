@@ -5,6 +5,7 @@
     <RollForward>Major</RollForward>
     <PublishReadyToRun>false</PublishReadyToRun>
     <TieredCompilation>false</TieredCompilation>
+    <BuildContentAutomatically>false</BuildContentAutomatically>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -25,6 +26,10 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.2" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.*" />
-    <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.*" />
   </ItemGroup>
+
+  <!-- Custom target to build content before compilation -->
+  <Target Name="BuildContent" BeforeTargets="Build">
+    <Exec Command="mgcb /@:Content\Content.mgcb /platform:DesktopGL /outputDir:Content\bin\DesktopGL\Content /intermediateDir:Content\obj\DesktopGL\net9.0\Content /workingDir:Content\" IgnoreExitCode="false" />
+  </Target>
 </Project>

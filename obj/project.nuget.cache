@@ -1,12 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "hUWzZ7k3LtM=",
+  "dgSpecHash": "1/MVHxv20io=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Lucas\\TopDownGame\\DungeonOfAlgorithms\\DungeonOfAlgorithms.csproj",
+  "projectFilePath": "C:\\Users\\Lucas\\DungeonOfAlgorithms-Educacional\\DungeonOfAlgorithms.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Lucas\\.nuget\\packages\\microsoft.data.sqlite\\10.0.2\\microsoft.data.sqlite.10.0.2.nupkg.sha512",
     "C:\\Users\\Lucas\\.nuget\\packages\\microsoft.data.sqlite.core\\10.0.2\\microsoft.data.sqlite.core.10.0.2.nupkg.sha512",
-    "C:\\Users\\Lucas\\.nuget\\packages\\monogame.content.builder.task\\3.8.4.1\\monogame.content.builder.task.3.8.4.1.nupkg.sha512",
     "C:\\Users\\Lucas\\.nuget\\packages\\monogame.framework.desktopgl\\3.8.4.1\\monogame.framework.desktopgl.3.8.4.1.nupkg.sha512",
     "C:\\Users\\Lucas\\.nuget\\packages\\monogame.library.openal\\1.24.3.2\\monogame.library.openal.1.24.3.2.nupkg.sha512",
     "C:\\Users\\Lucas\\.nuget\\packages\\monogame.library.sdl\\2.32.2.1\\monogame.library.sdl.2.32.2.1.nupkg.sha512",

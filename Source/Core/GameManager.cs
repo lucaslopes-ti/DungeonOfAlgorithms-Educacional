@@ -23,7 +23,7 @@ public class GameManager
     /// </summary>
     public static GameManager Instance => _instance ??= new GameManager();
 
-    // 🚫 Construtor privado - ninguém cria GameManager na mão!
+    // Construtor privado - ninguém cria GameManager na mão!
     private GameManager() { }
 
     /// <summary>

@@ -31,7 +31,7 @@ public class DungeonManager
     /// <summary>A sala onde o player está agora</summary>
     public Room CurrentRoom { get; private set; }
 
-    // 🚫 Construtor privado (Singleton)
+    // Construtor privado (Singleton)
     private DungeonManager() { }
 
     /// <summary>
