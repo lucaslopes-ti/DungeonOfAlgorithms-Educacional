@@ -1,0 +1,72 @@
+# Build Results
+bin/
+obj/
+*.zip
+.vs/
+
+# Visual Studio
+.vscode/
+*.sln.DotSettings
+*.user
+*.userosscache
+*.sln.iml
+
+# MonoGame
+Content/obj/
+# Ignorar Content/bin mas manter os arquivos .xnb e .ogg compilados
+Content/bin/*
+!Content/bin/DesktopGL/
+!Content/bin/DesktopGL/Content/
+!Content/bin/DesktopGL/Content/**/*.xnb
+!Content/bin/DesktopGL/Content/**/*.ogg
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# NuGet
+.nuget/
+packages/
+*.nupkg
+*.snupkg
+
+# Build outputs
+*.dll
+*.exe
+!Releases/**/*.exe
+!Releases/**/*.dll
+*.out
+
+# Runtime
+*.log
+*.db
+
+# Backups
+**/Backup/
+*.bak
+*.backup
+
+# Scripts de automação local
+auto-commit.ps1
+auto-commit-log.txt
+JOGAR.bat
+BUILD.bat
+LIMPAR.bat
+
+# Arquivos temporários e de teste
+error_log.txt
+error_output.txt
+stderr.txt
+stdout.txt
+
+# Músicas de backup/teste
+Content/Music/*_backup*.mp3
+Content/Music/*_original.mp3
+Content/Music/music_bg.*
+Content/Music/Silhouette*.mp3

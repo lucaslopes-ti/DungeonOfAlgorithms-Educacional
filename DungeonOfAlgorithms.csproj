@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <RollForward>Major</RollForward>
+    <PublishReadyToRun>false</PublishReadyToRun>
+    <TieredCompilation>false</TieredCompilation>
+    <BuildContentAutomatically>true</BuildContentAutomatically>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Icon.ico" />
+    <None Remove="Icon.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Icon.ico">
+      <LogicalName>Icon.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Icon.bmp">
+      <LogicalName>Icon.bmp</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.2" />
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.*" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content/Music/OnFlip.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content/bin/DesktopGL/Content/**/*.*">
+      <Link>Content/%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content/Maps/*.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <!-- Custom target to build content before compilation (cross-platform) -->
+  <Target Name="BuildContent" BeforeTargets="Build" Condition="'$(BuildContentAutomatically)' == 'true'">
+    <!-- Windows -->
+    <Exec Condition="$([MSBuild]::IsOSPlatform('Windows'))" Command="mgcb /@:Content\Content.mgcb /platform:DesktopGL /outputDir:Content\bin\DesktopGL\Content /intermediateDir:Content\obj\DesktopGL\net9.0\Content /workingDir:Content\" WorkingDirectory="$(MSBuildProjectDirectory)" IgnoreExitCode="false" />
+    <!-- macOS/Linux -->
+    <Exec Condition="!$([MSBuild]::IsOSPlatform('Windows'))" Command="mgcb /@:Content/Content.mgcb /platform:DesktopGL /outputDir:Content/bin/DesktopGL/Content /intermediateDir:Content/obj/DesktopGL/net9.0/Content /workingDir:Content" WorkingDirectory="$(MSBuildProjectDirectory)" IgnoreExitCode="false" />
+  </Target>
+</Project>

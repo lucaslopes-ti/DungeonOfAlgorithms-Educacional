@@ -1,0 +1,28 @@
+* text=auto
+
+# C# files
+*.cs text diff=csharp
+*.csproj text merge=union
+*.sln text merge=union
+
+# Config files
+*.config text
+*.json text
+*.xml text
+*.yml text
+*.yaml text
+*.md text
+
+# Graphics
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.bmp binary
+*.ico binary
+*.xnb binary
+
+# Audio
+*.wav binary
+*.mp3 binary
+*.ogg binary
