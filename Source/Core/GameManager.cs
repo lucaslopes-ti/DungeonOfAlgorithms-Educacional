@@ -21,7 +21,10 @@ public class GameManager
     /// Pega a instância do GameManager. Se não existir, cria uma.
     /// É tipo magia, mas com código.
     /// </summary>
-    public static GameManager Instance => _instance ??= new GameManager();
+    public static GameManager Instance => _instance ??= new GameManager(); // ??= significa se for nulo, criar novo
+
+    // _instance == null? _instance = new GameManager() : _instance;
+    // _instance é nulo? Cria novo GameManager, senão retorna o existente
 
     // Construtor privado - ninguém cria GameManager na mão!
     private GameManager() { }

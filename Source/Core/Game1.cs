@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using DungeonOfAlgorithms.Source.Entities;
+using Microsoft.Xna.Framework.Media;
 
 namespace DungeonOfAlgorithms.Source.Core;
 
@@ -45,12 +46,13 @@ public class Game1 : Game
     private KeyboardState _lastKeyboardState;  // Estado anterior do teclado
     private System.Collections.Generic.Dictionary<string, Texture2D> _playerTextures;  // Sprites do player
     private Texture2D _vignetteTexture;        // Efeito de vinheta (escurece bordas)
-    
+    private Song _ambientMusic;               // Música de fundo
+
     // ═══════════════════════════════════════════════════════════════════════════
     // 🌓 SISTEMA DE TRANSIÇÃO DE SALA (FADE)
     // ═══════════════════════════════════════════════════════════════════════════
     // Quando troca de sala, faz um fade: escurece → muda sala → clareia
-    
+
     private Texture2D _fadeTexture;            // Textura preta 1x1 esticada
     private float _fadeAlpha = 0f;             // Opacidade (0=invisível, 1=preto total)
     private bool _isFading = false;            // Está em transição?
@@ -178,6 +180,7 @@ public class Game1 : Game
         room1.AddEnemy(EnemyFactory.CreateEnemy("Slime", new Vector2(400, 200)));
 
         // Sala 2: Ghosts (mais rápidos, te perseguem!)
+        room2.AddEnemy(EnemyFactory.CreateEnemy("Ghost", new Vector2(100, 200)));
         room2.AddEnemy(EnemyFactory.CreateEnemy("Ghost", new Vector2(200, 200)));
         room2.AddEnemy(EnemyFactory.CreateEnemy("Ghost", new Vector2(350, 150)));
         
@@ -268,6 +271,20 @@ public class Game1 : Game
         // Carrega fonte e cria HUD
         _font = Content.Load<SpriteFont>("Fonts/GameFont");
         _hud = new HUD(_font);
+
+
+        // ═════════════════════════════════════════════════════════════════════
+        // MUSICA DE FUNDO
+        try
+        {
+            _ambientMusic = Content.Load<Song>("Audio/OnFlip");
+            AudioManager.Instance.PlayAmbientMusic(_ambientMusic, 1.0f);
+            System.Console.WriteLine("Ambient music loaded and playing.");
+        }
+        catch (Exception ex)
+        {
+            System.Console.WriteLine("Error loading or playing music: " + ex.Message);
+        }
         
         // --- Vinheta: Efeito cinematográfico que escurece as bordas ---
         // Isso faz o centro da tela ficar mais iluminado
@@ -381,6 +398,9 @@ public class Game1 : Game
                 // Reset completo - novo player, volta pra sala 1
                 _player = new Player(_playerTextures, new Vector2(100, 100));
                 DungeonManager.Instance.ChangeRoom(1);
+                if (_ambientMusic != null) {
+                    AudioManager.Instance.PlayAmbientMusic(_ambientMusic, 1.0f);
+                }
                 _gameState = GameState.Playing;
             }
             _lastKeyboardState = currentKeyboard;
@@ -394,6 +414,15 @@ public class Game1 : Game
         if (Keyboard.GetState().IsKeyDown(Keys.P) && _lastKeyboardState.IsKeyUp(Keys.P))
         {
             _gameState = _gameState == GameState.Paused ? GameState.Playing : GameState.Paused;
+
+            if (_gameState == GameState.Paused)
+            {
+                AudioManager.Instance.PauseAmbientMusic();
+            }
+            else
+            {
+                AudioManager.Instance.ResumeAmbientMusic();
+            }
         }
         _lastKeyboardState = Keyboard.GetState();
         
@@ -402,6 +431,8 @@ public class Game1 : Game
             Window.Title = "PAUSED - Press P to Resume";
             return;  // Congela tudo!
         }
+
+
         
         // ═════════════════════════════════════════════════════════════════════
         // 🏆 ESTADO: VITÓRIA!

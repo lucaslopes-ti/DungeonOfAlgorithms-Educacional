@@ -27,6 +27,15 @@
     <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.2" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.*" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Music\OnFlip.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\bin\DesktopGL\Content\**\*.*">
+      <Link>Content\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
   <!-- Custom target to build content before compilation (cross-platform) -->
   <Target Name="BuildContent" BeforeTargets="Build" Condition="'$(BuildContentAutomatically)' == 'true'">

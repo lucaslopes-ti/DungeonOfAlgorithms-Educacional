@@ -381,6 +381,11 @@
 /processorParam:TextureFormat=Color
 /build:Items/Boxes/6.png
 
+#begin Music/OnFlip.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/build:Music/OnFlip.mp3
+
 #begin Items/Boxes/7.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -500,3 +505,9 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Items/Boxes/16.png
+
+#begin Music/Onflip.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/Onflip.mp3
