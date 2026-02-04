@@ -5,7 +5,7 @@
     <RollForward>Major</RollForward>
     <PublishReadyToRun>false</PublishReadyToRun>
     <TieredCompilation>false</TieredCompilation>
-    <BuildContentAutomatically>true</BuildContentAutomatically>
+    <BuildContentAutomatically>false</BuildContentAutomatically>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
