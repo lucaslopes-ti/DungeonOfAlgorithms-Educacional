@@ -178,6 +178,7 @@ public class Game1 : Game
         // Sala 1: Slimes (patrulham - movimento previsível)
         room1.AddEnemy(EnemyFactory.CreateEnemy("Slime", new Vector2(350, 270)));
         room1.AddEnemy(EnemyFactory.CreateEnemy("Slime", new Vector2(400, 200)));
+        room1.AddEnemy(EnemyFactory.CreateEnemy("Boss", new Vector2(200, 100)));
 
         // Sala 2: Ghosts (mais rápidos, te perseguem!)
         room2.AddEnemy(EnemyFactory.CreateEnemy("Ghost", new Vector2(100, 200)));
