@@ -1,8 +1,10 @@
 # Build Results
 bin/
 obj/
+publish/
 *.zip
 .vs/
+.claude/
 
 # Visual Studio
 .vscode/

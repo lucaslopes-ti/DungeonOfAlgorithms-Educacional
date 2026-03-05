@@ -1,21 +1,9 @@
-// ═══════════════════════════════════════════════════════════════════════════════
-// COMPORTAMENTOS DE INIMIGOS - Strategy Pattern
-// ═══════════════════════════════════════════════════════════════════════════════
-// PatrolBehavior = Patrulha em 4 direcoes com pausa
-// ChaseBehavior = Persegue o player quando perto, patrulha quando longe
-// WanderBehavior = Movimento aleatorio organico
-// ═══════════════════════════════════════════════════════════════════════════════
-
 using Microsoft.Xna.Framework;
 using DungeonOfAlgorithms.Source.Entities;
 using System;
 
 namespace DungeonOfAlgorithms.Source.Core;
 
-/// <summary>
-/// Patrulha em varias direcoes com pausas entre movimentos.
-/// Usado por Slimes e Boss.
-/// </summary>
 public class PatrolBehavior : IEnemyBehavior
 {
     private float _moveTimer;
@@ -75,10 +63,6 @@ public class PatrolBehavior : IEnemyBehavior
     }
 }
 
-/// <summary>
-/// Persegue o player quando esta perto, patrulha quando longe.
-/// Usado por Ghosts.
-/// </summary>
 public class ChaseBehavior : IEnemyBehavior
 {
     private const float CHASE_RANGE = 120f;
@@ -111,7 +95,6 @@ public class ChaseBehavior : IEnemyBehavior
             if (direction != Vector2.Zero)
                 direction.Normalize();
 
-            // Oscilacao lateral para movimento mais natural
             float wobble = (float)Math.Sin(gameTime.TotalGameTime.TotalSeconds * 3f + enemy.Id) * 0.15f;
             Vector2 perpendicular = new Vector2(-direction.Y, direction.X);
             direction += perpendicular * wobble;
@@ -142,10 +125,6 @@ public class ChaseBehavior : IEnemyBehavior
     }
 }
 
-/// <summary>
-/// Movimento aleatorio organico com mudancas suaves de direcao.
-/// Usado por Aliens.
-/// </summary>
 public class WanderBehavior : IEnemyBehavior
 {
     private float _directionTimer;
@@ -175,7 +154,6 @@ public class WanderBehavior : IEnemyBehavior
             _directionTimer = 0f;
         }
 
-        // Suaviza transicao de angulo
         float angleDiff = _targetAngle - _currentAngle;
         while (angleDiff > Math.PI) angleDiff -= (float)(Math.PI * 2);
         while (angleDiff < -Math.PI) angleDiff += (float)(Math.PI * 2);

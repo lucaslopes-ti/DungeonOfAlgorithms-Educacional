@@ -1,11 +1,3 @@
-// =============================================================================
-// GAME1 - O Cerebro Central do Dungeon of Algorithms
-// =============================================================================
-// Esta e a classe principal do jogo. Herda de Game (MonoGame).
-// Game Loop:
-//   Initialize() -> LoadContent() -> [ Update() -> Draw() ] <- repete 60x/segundo
-// =============================================================================
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -17,15 +9,12 @@ namespace DungeonOfAlgorithms.Source.Core;
 
 public class Game1 : Game
 {
-    // Resolucao do jogo
     private const int SCREEN_WIDTH = 1280;
     private const int SCREEN_HEIGHT = 720;
 
-    // Graficos
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
-    // Entidades e sistemas
     private Player _player;
     private Camera _camera;
     private HUD _hud;
@@ -36,7 +25,6 @@ public class Game1 : Game
     private Texture2D _vignetteTexture;
     private Song _ambientMusic;
 
-    // Sistema de fade
     private Texture2D _fadeTexture;
     private float _fadeAlpha = 0f;
     private bool _isFading = false;
@@ -45,7 +33,6 @@ public class Game1 : Game
     private int _pendingRoom = -1;
     private Vector2 _pendingSpawnPosition;
 
-    // Sistema de menu
     private int _menuSelectedIndex = 0;
     private string[] _menuOptions = { "JOGAR", "CONTINUAR", "CREDITOS", "SAIR" };
     private float _menuPulseTimer = 0f;
@@ -53,33 +40,26 @@ public class Game1 : Game
     private bool _hasSaveData = false;
     private float _titleScale = 1f;
 
-    // Pause menu
     private int _pauseSelectedIndex = 0;
     private string[] _pauseOptions = { "CONTINUAR", "MENU PRINCIPAL" };
 
-    // Credits scroll
     private float _creditsScrollY = 0f;
 
-    // Game Over / Victory timers para animacao
     private float _endScreenTimer = 0f;
 
-    // Sistema de mensagens/tutorial
     private string _currentMessage = "";
     private float _messageTimer = 0f;
     private const float MESSAGE_DURATION = 4f;
     private float _messageAlpha = 0f;
     private bool _showIntro = true;
 
-    // Intro overlay (tela de objetivo)
     private float _introTimer = 0f;
     private const float INTRO_DURATION = 6f;
 
-    // Texto de transicao de sala
     private string _roomTransitionText = "";
     private float _roomTransitionTimer = 0f;
     private const float ROOM_TRANSITION_DURATION = 2.5f;
 
-    // Notificacao de moedas completas
     private bool _allCoinsNotified = false;
 
     public Game1()
@@ -106,7 +86,6 @@ public class Game1 : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        // Criacao das salas (Graph Structure)
         var tilesetTexture = Content.Load<Texture2D>("Tiles/Tileset");
 
         int[,] map1 = DungeonManager.Instance.LoadMapFromCSV("Content/Maps/Room_01.csv");
@@ -118,13 +97,11 @@ public class Game1 : Game
         int[,] map3 = DungeonManager.Instance.LoadMapFromCSV("Content/Maps/Room_03.csv");
         var room3 = new Room(3, new Tilemap(tilesetTexture, map3, 16, 16));
 
-        // Conexoes (Arestas do Grafo)
         room1.Connect("East", 2);
         room2.Connect("West", 1);
         room2.Connect("East", 3);
         room3.Connect("West", 2);
 
-        // Itens
         ItemFactory.Initialize(Content);
 
         room1.AddItem(ItemFactory.CreateItem("Coin", new Vector2(80, 80)));
@@ -146,7 +123,6 @@ public class Game1 : Game
         room3.AddItem(ItemFactory.CreateItem("Coin", new Vector2(250, 80)));
         room3.AddItem(ItemFactory.CreateItem("Coin", new Vector2(300, 100)));
 
-        // Inimigos
         EnemyFactory.Initialize(Content);
 
         room1.AddEnemy(EnemyFactory.CreateEnemy("Slime", new Vector2(350, 270)));
@@ -163,10 +139,8 @@ public class Game1 : Game
         room3.AddEnemy(EnemyFactory.CreateEnemy("Ghost", new Vector2(200, 200)));
         room3.AddEnemy(EnemyFactory.CreateEnemy("Ghost", new Vector2(250, 200)));
 
-        // Bau na sala 3 - no final do cenario (area walkable: Y 48-224)
         room3.AddItem(ItemFactory.CreateItem("Chest", new Vector2(420, 130)));
 
-        // Objetos decorativos
         var boxTextures = new Texture2D[16];
         for (int i = 0; i < 16; i++)
         {
@@ -194,13 +168,11 @@ public class Game1 : Game
         room3.AddDecor(new DecorObject(boxTextures[15], new Vector2(380, 180)));
         room3.AddDecor(new DecorObject(boxTextures[10], new Vector2(150, 100)));
 
-        // Registra salas
         DungeonManager.Instance.AddRoom(room1);
         DungeonManager.Instance.AddRoom(room2);
         DungeonManager.Instance.AddRoom(room3);
         DungeonManager.Instance.ChangeRoom(1);
 
-        // Player
         _playerTextures = new System.Collections.Generic.Dictionary<string, Texture2D>
         {
             { "Down", Content.Load<Texture2D>("Player/Player_Down") },
@@ -213,18 +185,15 @@ public class Game1 : Game
 
         _player = new Player(_playerTextures, new Vector2(50, 80));
 
-        // UI e efeitos visuais
         _font = Content.Load<SpriteFont>("Fonts/GameFont");
         _hud = new HUD(_font);
 
-        // Musica de fundo
         try
         {
             _ambientMusic = Content.Load<Song>("Music/OnFlip");
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Volume = 0.7f;
             MediaPlayer.Play(_ambientMusic);
-            System.Console.WriteLine("[Music] BGM started successfully");
         }
         catch (Exception ex)
         {
@@ -232,7 +201,6 @@ public class Game1 : Game
             System.Console.WriteLine("[Music] Stack: " + ex.StackTrace);
         }
 
-        // Vinheta para 1280x720
         _vignetteTexture = new Texture2D(GraphicsDevice, SCREEN_WIDTH, SCREEN_HEIGHT);
         Color[] data = new Color[SCREEN_WIDTH * SCREEN_HEIGHT];
         Vector2 center = new Vector2(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f);
@@ -249,14 +217,12 @@ public class Game1 : Game
         }
         _vignetteTexture.SetData(data);
 
-        // Texturas auxiliares
         _fadeTexture = new Texture2D(GraphicsDevice, 1, 1);
         _fadeTexture.SetData(new[] { Color.Black });
 
         _pixelTexture = new Texture2D(GraphicsDevice, 1, 1);
         _pixelTexture.SetData(new[] { Color.White });
 
-        // Verifica se tem save
         try
         {
             var saveData = DatabaseManager.Instance.LoadGame();
@@ -270,33 +236,23 @@ public class Game1 : Game
         _gameState = GameState.MainMenu;
     }
 
-    // =========================================================================
-    // UPDATE
-    // =========================================================================
-
     protected override void Update(GameTime gameTime)
     {
         InputManager.Instance.Update();
         var currentKeyboard = Keyboard.GetState();
         float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-        // F11 para fullscreen
         if (currentKeyboard.IsKeyDown(Keys.F11) && _lastKeyboardState.IsKeyUp(Keys.F11))
         {
             _graphics.IsFullScreen = !_graphics.IsFullScreen;
             _graphics.ApplyChanges();
         }
 
-        // =============================================
-        // MENU PRINCIPAL
-        // =============================================
-
         if (_gameState == GameState.MainMenu)
         {
             _menuPulseTimer += deltaTime;
             _titleScale = 1f + 0.03f * (float)Math.Sin(_menuPulseTimer * 2);
 
-            // Navegacao
             if ((currentKeyboard.IsKeyDown(Keys.Up) && _lastKeyboardState.IsKeyUp(Keys.Up)) ||
                 (currentKeyboard.IsKeyDown(Keys.W) && _lastKeyboardState.IsKeyUp(Keys.W)))
             {
@@ -310,7 +266,6 @@ public class Game1 : Game
                 if (_menuSelectedIndex >= _menuOptions.Length) _menuSelectedIndex = 0;
             }
 
-            // Skip CONTINUAR se nao tem save
             if (_menuSelectedIndex == 1 && !_hasSaveData)
             {
                 if (currentKeyboard.IsKeyDown(Keys.Down) || currentKeyboard.IsKeyDown(Keys.S))
@@ -319,19 +274,18 @@ public class Game1 : Game
                     _menuSelectedIndex = 0;
             }
 
-            // Selecao
             if (currentKeyboard.IsKeyDown(Keys.Enter) && _lastKeyboardState.IsKeyUp(Keys.Enter))
             {
                 switch (_menuSelectedIndex)
                 {
-                    case 0: // JOGAR
+                    case 0:
                         ResetGame();
                         _gameState = GameState.Playing;
                         _showIntro = true;
                         _introTimer = INTRO_DURATION;
                         ShowRoomTransition(1);
                         break;
-                    case 1: // CONTINUAR
+                    case 1:
                         if (_hasSaveData)
                         {
                             LoadSavedGame();
@@ -339,11 +293,11 @@ public class Game1 : Game
                             _showIntro = false;
                         }
                         break;
-                    case 2: // CREDITOS
+                    case 2:
                         _creditsScrollY = 0f;
                         _gameState = GameState.Credits;
                         break;
-                    case 3: // SAIR
+                    case 3:
                         Exit();
                         break;
                 }
@@ -353,10 +307,6 @@ public class Game1 : Game
             base.Update(gameTime);
             return;
         }
-
-        // =============================================
-        // CREDITOS
-        // =============================================
 
         if (_gameState == GameState.Credits)
         {
@@ -371,10 +321,6 @@ public class Game1 : Game
             base.Update(gameTime);
             return;
         }
-
-        // =============================================
-        // GAME OVER
-        // =============================================
 
         if (_gameState == GameState.GameOver)
         {
@@ -399,10 +345,6 @@ public class Game1 : Game
             return;
         }
 
-        // =============================================
-        // VITORIA
-        // =============================================
-
         if (_gameState == GameState.Victory)
         {
             _endScreenTimer += deltaTime;
@@ -426,10 +368,6 @@ public class Game1 : Game
             return;
         }
 
-        // =============================================
-        // PAUSA (P ou ESC para pausar/despausar)
-        // =============================================
-
         bool pausePressed = (currentKeyboard.IsKeyDown(Keys.P) && _lastKeyboardState.IsKeyUp(Keys.P)) ||
                             (currentKeyboard.IsKeyDown(Keys.Escape) && _lastKeyboardState.IsKeyUp(Keys.Escape));
 
@@ -444,7 +382,6 @@ public class Game1 : Game
         {
             _menuPulseTimer += deltaTime;
 
-            // Navegacao do menu de pausa
             if ((currentKeyboard.IsKeyDown(Keys.Up) && _lastKeyboardState.IsKeyUp(Keys.Up)) ||
                 (currentKeyboard.IsKeyDown(Keys.W) && _lastKeyboardState.IsKeyUp(Keys.W)))
             {
@@ -460,12 +397,12 @@ public class Game1 : Game
 
             if (currentKeyboard.IsKeyDown(Keys.Enter) && _lastKeyboardState.IsKeyUp(Keys.Enter))
             {
-                if (_pauseSelectedIndex == 0) // CONTINUAR
+                if (_pauseSelectedIndex == 0)
                 {
                     _gameState = GameState.Playing;
                     AudioManager.Instance.ResumeAmbientMusic();
                 }
-                else if (_pauseSelectedIndex == 1) // MENU PRINCIPAL
+                else if (_pauseSelectedIndex == 1)
                 {
                     _gameState = GameState.MainMenu;
                     _menuSelectedIndex = 0;
@@ -474,7 +411,6 @@ public class Game1 : Game
                 }
             }
 
-            // P ou ESC para despausar rapido
             if (pausePressed)
             {
                 _gameState = GameState.Playing;
@@ -486,13 +422,8 @@ public class Game1 : Game
             return;
         }
 
-        // =============================================
-        // JOGANDO
-        // =============================================
-
         _lastKeyboardState = currentKeyboard;
 
-        // Atualiza timers de mensagem
         if (_messageTimer > 0)
         {
             _messageTimer -= deltaTime;
@@ -515,19 +446,16 @@ public class Game1 : Game
         Vector2 prevPosition = _player.Position;
         _player.Update(gameTime, tilemap);
 
-        // Colisao com decor usando sliding (X e Y separados)
+        // Sliding collision: try X-only, then Y-only, then revert both
         Vector2 afterMove = _player.Position;
         if (currentRoom.IsCollidingWithDecor(_player.Bounds))
         {
-            // Tenta manter X, reverte Y
             _player.SetPosition(new Vector2(afterMove.X, prevPosition.Y));
             if (currentRoom.IsCollidingWithDecor(_player.Bounds))
             {
-                // Tenta manter Y, reverte X
                 _player.SetPosition(new Vector2(prevPosition.X, afterMove.Y));
                 if (currentRoom.IsCollidingWithDecor(_player.Bounds))
                 {
-                    // Ambos falham, reverte tudo
                     _player.SetPosition(prevPosition);
                 }
             }
@@ -541,7 +469,6 @@ public class Game1 : Game
             return;
         }
 
-        // Atualiza estado do bau (trancado/destrancado)
         bool allCoins = DungeonManager.Instance.AllCoinsCollected;
         foreach (var room in DungeonManager.Instance.Rooms.Values)
         {
@@ -552,7 +479,6 @@ public class Game1 : Game
             }
         }
 
-        // Notificacao quando todas as moedas sao coletadas
         if (allCoins && !_allCoinsNotified)
         {
             _allCoinsNotified = true;
@@ -568,7 +494,6 @@ public class Game1 : Game
             }
             else
             {
-                // Feedback ao coletar moeda
                 int collected = DungeonManager.Instance.CollectedCoins;
                 int total = DungeonManager.Instance.TotalCoins;
                 if (collected < total)
@@ -576,7 +501,6 @@ public class Game1 : Game
             }
         });
 
-        // Sistema de fade para transicao de sala
         if (_isFading)
         {
             if (_fadeOut)
@@ -609,7 +533,6 @@ public class Game1 : Game
             return;
         }
 
-        // Deteccao de portas
         int mapWidth = currentRoom.Tilemap.MapWidth;
         int mapHeight = currentRoom.Tilemap.MapHeight;
         int playerCenterX = (int)(_player.Position.X + 8);
@@ -652,7 +575,6 @@ public class Game1 : Game
             _fadeOut = true;
         }
 
-        // Save/Load
         try
         {
             if (Keyboard.GetState().IsKeyDown(Keys.F5) && _lastKeyboardState.IsKeyUp(Keys.F5))
@@ -678,10 +600,6 @@ public class Game1 : Game
         base.Update(gameTime);
     }
 
-    // =========================================================================
-    // DRAW
-    // =========================================================================
-
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(new Color(15, 15, 25));
@@ -690,37 +608,27 @@ public class Game1 : Game
         int sh = SCREEN_HEIGHT;
         int cx = sw / 2;
 
-        // =============================================
-        // MENU PRINCIPAL
-        // =============================================
-
         if (_gameState == GameState.MainMenu)
         {
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
-            // Background com gradiente escuro
             _spriteBatch.Draw(_pixelTexture, new Rectangle(0, 0, sw, sh), new Color(10, 10, 20));
 
-            // Particulas decorativas (estrelas estaticas baseadas no timer)
             DrawMenuParticles();
 
-            // Titulo com escala pulsante
             string title = "DUNGEON OF ALGORITHMS";
             Vector2 titleSize = _font.MeasureString(title);
             Vector2 titlePos = new Vector2(cx - titleSize.X / 2, 120);
             DrawShadowString(_font, title, titlePos, Color.Gold, 2);
 
-            // Subtitulo
             string subtitle = "The Memory Leak Chronicle";
             Vector2 subtitleSize = _font.MeasureString(subtitle);
             DrawShadowString(_font, subtitle, new Vector2(cx - subtitleSize.X / 2, 165), new Color(100, 220, 100));
 
-            // Linha decorativa superior
             int lineWidth = 400;
             _spriteBatch.Draw(_pixelTexture, new Rectangle(cx - lineWidth / 2, 200, lineWidth, 2), Color.Gold * 0.4f);
             _spriteBatch.Draw(_pixelTexture, new Rectangle(cx - lineWidth / 2, 203, lineWidth, 1), Color.Gold * 0.2f);
 
-            // Instrucoes do jogo
             string[] instructions = {
                 "Objetivo: Colete todas as moedas",
                 "em todas as salas para desbloquear",
@@ -734,7 +642,6 @@ public class Game1 : Game
                     Color.LightGray * 0.7f);
             }
 
-            // Opcoes do menu
             int menuStartY = 300;
             int menuSpacing = 50;
 
@@ -759,20 +666,17 @@ public class Game1 : Game
                 {
                     float arrowOffset = (float)(Math.Sin(_menuPulseTimer * 8) * 4);
 
-                    // Caixa de destaque
                     int boxPadding = 12;
                     _spriteBatch.Draw(_pixelTexture,
                         new Rectangle((int)(optionPos.X - boxPadding - 20), (int)(optionPos.Y - 4),
                                       (int)(textSize.X + boxPadding * 2 + 40), (int)(textSize.Y + 8)),
                         Color.Gold * 0.08f);
 
-                    // Borda da caixa
                     DrawHorizontalLine((int)(optionPos.X - boxPadding - 20), (int)(optionPos.Y - 4),
                         (int)(textSize.X + boxPadding * 2 + 40), Color.Gold * 0.3f);
                     DrawHorizontalLine((int)(optionPos.X - boxPadding - 20), (int)(optionPos.Y + textSize.Y + 3),
                         (int)(textSize.X + boxPadding * 2 + 40), Color.Gold * 0.3f);
 
-                    // Setas animadas
                     DrawShadowString(_font, ">>", new Vector2(optionPos.X - 35 + arrowOffset, optionPos.Y), Color.Gold);
                     DrawShadowString(_font, "<<", new Vector2(optionPos.X + textSize.X + 10 - arrowOffset, optionPos.Y), Color.Gold);
                 }
@@ -780,10 +684,8 @@ public class Game1 : Game
                 DrawShadowString(_font, _menuOptions[i], optionPos, optionColor);
             }
 
-            // Linha decorativa inferior
             _spriteBatch.Draw(_pixelTexture, new Rectangle(cx - lineWidth / 2, 520, lineWidth, 2), Color.Gold * 0.4f);
 
-            // Dicas de controle
             string hint1 = "[W/S] Navegar   [ENTER] Selecionar   [F11] Tela Cheia";
             Vector2 hint1Size = _font.MeasureString(hint1);
             DrawShadowString(_font, hint1, new Vector2(cx - hint1Size.X / 2, 540), Color.Gray * 0.6f);
@@ -792,7 +694,6 @@ public class Game1 : Game
             Vector2 hint2Size = _font.MeasureString(hint2);
             DrawShadowString(_font, hint2, new Vector2(cx - hint2Size.X / 2, 560), Color.Gray * 0.5f);
 
-            // Versao
             string version = "v2.0 - Dungeon of Algorithms";
             Vector2 versionSize = _font.MeasureString(version);
             DrawShadowString(_font, version, new Vector2(cx - versionSize.X / 2, sh - 35), Color.Gray * 0.4f);
@@ -801,10 +702,6 @@ public class Game1 : Game
             base.Draw(gameTime);
             return;
         }
-
-        // =============================================
-        // CREDITOS
-        // =============================================
 
         if (_gameState == GameState.Credits)
         {
@@ -865,7 +762,6 @@ public class Game1 : Game
                 DrawShadowString(_font, creditLines[i], new Vector2(cx - lineSize.X / 2, lineY), lineColor);
             }
 
-            // Reset scroll quando chega ao fim
             if (y + creditLines.Length * 30 < 0)
                 _creditsScrollY = 0f;
 
@@ -874,28 +770,15 @@ public class Game1 : Game
             return;
         }
 
-        // =============================================
-        // WORLD SPACE - Gameplay
-        // =============================================
-
         _spriteBatch.Begin(transformMatrix: _camera.Transform, samplerState: SamplerState.PointClamp);
         DungeonManager.Instance.CurrentRoom.Draw(_spriteBatch);
         _player.Draw(_spriteBatch);
         _spriteBatch.End();
 
-        // =============================================
-        // SCREEN SPACE - UI
-        // =============================================
-
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
-        // Vinheta
         if (_vignetteTexture != null)
             _spriteBatch.Draw(_vignetteTexture, Vector2.Zero, Color.White);
-
-        // =============================================
-        // GAME OVER
-        // =============================================
 
         if (_gameState == GameState.GameOver)
         {
@@ -934,10 +817,6 @@ public class Game1 : Game
             }
         }
 
-        // =============================================
-        // VITORIA
-        // =============================================
-
         else if (_gameState == GameState.Victory)
         {
             _spriteBatch.Draw(_pixelTexture, new Rectangle(0, 0, sw, sh), Color.Black * 0.7f);
@@ -962,7 +841,6 @@ public class Game1 : Game
                 Vector2 scoreSize = _font.MeasureString(scoreText);
                 DrawShadowString(_font, scoreText, new Vector2(cx - scoreSize.X / 2, 290), Color.White * fadeIn2);
 
-                // Estrelas baseadas no score
                 int stars = _player.Score >= 15 ? 3 : (_player.Score >= 10 ? 2 : 1);
                 string starsText = new string('*', stars) + new string('.', 3 - stars);
                 Vector2 starsSize = _font.MeasureString(starsText);
@@ -977,10 +855,6 @@ public class Game1 : Game
                 DrawShadowString(_font, hint2vic, new Vector2(cx - h2Size.X / 2, 420), Color.Gray * fadeIn2 * 0.8f);
             }
         }
-
-        // =============================================
-        // PAUSA
-        // =============================================
 
         else if (_gameState == GameState.Paused)
         {
@@ -1021,22 +895,16 @@ public class Game1 : Game
             DrawShadowString(_font, pauseHint, new Vector2(cx - pauseHintSize.X / 2, 440), Color.Gray * 0.5f);
         }
 
-        // =============================================
-        // HUD DURANTE GAMEPLAY
-        // =============================================
-
         else if (_gameState == GameState.Playing)
         {
             _hud.Draw(_spriteBatch, _player, _pixelTexture, DungeonManager.Instance.CurrentRoom);
 
-            // Mensagem de tutorial/feedback (canto inferior central)
             if (_messageTimer > 0 && _messageAlpha > 0)
             {
                 Vector2 msgSize = _font.MeasureString(_currentMessage);
                 float msgX = cx - msgSize.X / 2;
                 float msgY = sh - 80;
 
-                // Background da mensagem
                 _spriteBatch.Draw(_pixelTexture,
                     new Rectangle((int)(msgX - 10), (int)(msgY - 5),
                                   (int)(msgSize.X + 20), (int)(msgSize.Y + 10)),
@@ -1046,7 +914,6 @@ public class Game1 : Game
                     new Vector2(msgX, msgY), Color.White * _messageAlpha);
             }
 
-            // Texto de transicao de sala (centro da tela, fade)
             if (_roomTransitionTimer > 0)
             {
                 float rtAlpha = _roomTransitionTimer > 1.5f ? 1f : _roomTransitionTimer / 1.5f;
@@ -1061,36 +928,29 @@ public class Game1 : Game
                     new Vector2(cx - rtSize.X / 2, sh / 3), Color.Gold * rtAlpha, 2);
             }
 
-            // Intro overlay - objetivo do jogo (aparece ao iniciar)
             if (_showIntro && _introTimer > 0)
             {
                 float introAlpha = _introTimer > 1f ? 1f : _introTimer;
 
-                // Fundo escuro semi-transparente
                 _spriteBatch.Draw(_pixelTexture, new Rectangle(0, 0, sw, sh), Color.Black * 0.6f * introAlpha);
 
-                // Caixa central
                 int boxW = 500;
                 int boxH = 200;
                 int boxX = cx - boxW / 2;
                 int boxY = sh / 2 - boxH / 2 - 30;
 
                 _spriteBatch.Draw(_pixelTexture, new Rectangle(boxX, boxY, boxW, boxH), Color.Black * 0.85f * introAlpha);
-                // Bordas
                 _spriteBatch.Draw(_pixelTexture, new Rectangle(boxX, boxY, boxW, 2), Color.Gold * 0.6f * introAlpha);
                 _spriteBatch.Draw(_pixelTexture, new Rectangle(boxX, boxY + boxH - 2, boxW, 2), Color.Gold * 0.6f * introAlpha);
                 _spriteBatch.Draw(_pixelTexture, new Rectangle(boxX, boxY, 2, boxH), Color.Gold * 0.6f * introAlpha);
                 _spriteBatch.Draw(_pixelTexture, new Rectangle(boxX + boxW - 2, boxY, 2, boxH), Color.Gold * 0.6f * introAlpha);
 
-                // Titulo
                 string introTitle = "MISSAO";
                 Vector2 itSize = _font.MeasureString(introTitle);
                 DrawShadowString(_font, introTitle, new Vector2(cx - itSize.X / 2, boxY + 15), Color.Gold * introAlpha, 2);
 
-                // Linha separadora
                 _spriteBatch.Draw(_pixelTexture, new Rectangle(boxX + 20, boxY + 45, boxW - 40, 1), Color.Gold * 0.4f * introAlpha);
 
-                // Instrucoes
                 string[] introLines = {
                     "Explore todas as 3 salas da dungeon.",
                     "Colete todas as moedas espalhadas.",
@@ -1109,14 +969,12 @@ public class Game1 : Game
                         new Vector2(cx - lineSize.X / 2, boxY + 55 + i * 20), lineColor * introAlpha * 0.9f);
                 }
 
-                // Controles
                 string ctrlText = "[WASD] Mover   [P/ESC] Pausar   [F5] Salvar";
                 Vector2 ctrlSize = _font.MeasureString(ctrlText);
                 DrawShadowString(_font, ctrlText,
                     new Vector2(cx - ctrlSize.X / 2, boxY + boxH + 15), Color.Gray * 0.6f * introAlpha);
             }
 
-            // Indicador de bau trancado/destrancado (canto inferior direito)
             if (!DungeonManager.Instance.AllCoinsCollected)
             {
                 string lockText = "Bau: TRANCADO";
@@ -1145,7 +1003,6 @@ public class Game1 : Game
 
         _spriteBatch.End();
 
-        // Fade overlay
         if (_fadeAlpha > 0)
         {
             _spriteBatch.Begin();
@@ -1155,10 +1012,6 @@ public class Game1 : Game
 
         base.Draw(gameTime);
     }
-
-    // =========================================================================
-    // HELPERS
-    // =========================================================================
 
     private void DrawShadowString(SpriteFont font, string text, Vector2 position, Color color, int shadowOffset = 1)
     {
@@ -1224,7 +1077,6 @@ public class Game1 : Game
         _messageTimer = 0f;
         _roomTransitionTimer = 0f;
 
-        // Reativa todos os itens
         foreach (var room in DungeonManager.Instance.Rooms.Values)
         {
             foreach (var item in room.Items)
