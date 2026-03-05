@@ -18,16 +18,15 @@ namespace DungeonOfAlgorithms.Source.Entities;
 /// </summary>
 public class ChestItem : Item
 {
+    /// <summary>Se o bau esta destrancado (todas as moedas coletadas)</summary>
+    public bool IsUnlocked { get; set; } = false;
+
     /// <summary>
     /// Cria um novo baú do tesouro.
     /// ID 999 porque ele é lendário, único, especial.
     /// </summary>
-    /// <param name="texture">A textura do baú (brilhante, dourado, irresistível)</param>
-    /// <param name="position">Onde esconder o tesouro</param>
-    public ChestItem(Texture2D texture, Vector2 position) 
-        : base(999, "Treasure Chest", texture, position) // 999 = ID lendário
+    public ChestItem(Texture2D texture, Vector2 position)
+        : base(999, "Treasure Chest", texture, position)
     {
-        // O construtor da classe pai faz todo o trabalho
-        // Esse baú é basicamente um Item com ego inflado
     }
 }

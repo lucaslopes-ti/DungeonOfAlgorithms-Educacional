@@ -102,22 +102,37 @@ public class Room
     /// <param name="onItemCollected">Callback quando um item é coletado (opcional)</param>
     public void Update(GameTime gameTime, Player player, System.Action<Item> onItemCollected = null)
     {
-        // 💰 Verifica coleta de itens
+        // Verifica coleta de itens
         foreach (var item in Items)
         {
-            if (item.IsActive && player.Bounds.Intersects(item.Bounds))
-            {
-                item.IsActive = false;            // Desativa o item
-                player.AddScore(item.Value);      // Dá os pontos pro player
-                onItemCollected?.Invoke(item);    // Dispara o callback (se tiver)
-            }
+            if (!item.IsActive) continue;
+            if (!player.Bounds.Intersects(item.Bounds)) continue;
+
+            // Bau so pode ser coletado se estiver destrancado
+            if (item is ChestItem chest && !chest.IsUnlocked)
+                continue;
+
+            item.IsActive = false;
+            player.AddScore(item.Value);
+            onItemCollected?.Invoke(item);
         }
-        
-        // 👹 Atualiza inimigos e verifica dano
+
+        // Atualiza animacao dos itens (bobbing)
+        foreach (var item in Items)
+            item.Update(gameTime);
+
+        // Atualiza inimigos e verifica dano
         foreach (var enemy in Enemies)
         {
+            Vector2 prevEnemyPos = enemy.Position;
             enemy.Update(gameTime, player, Tilemap);
-            
+
+            // Colisao inimigo-decor (reverte se colidiu)
+            if (IsCollidingWithDecor(enemy.Bounds))
+            {
+                enemy.Position = prevEnemyPos;
+            }
+
             // Se o inimigo tocar no player, causa dano!
             if (player.Bounds.Intersects(enemy.Bounds))
             {

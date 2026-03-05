@@ -37,12 +37,17 @@ public class Item : IGameEntity
     
     // 🖼️ Textura do item
     private Texture2D _texture;
-    
+
+    // Animacao de flutuacao
+    private float _bobTimer = 0f;
+    private float _bobOffset = 0f;
+    private float _bobSpeed;
+
     /// <summary>
-    /// Área de colisão do item. 16x16 pixels padrão.
+    /// Área de colisão do item, baseada no tamanho real da textura.
     /// Se o player encostar, coleta!
     /// </summary>
-    public Rectangle Bounds => new Rectangle((int)Position.X, (int)Position.Y, 16, 16);
+    public Rectangle Bounds => new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height);
 
     /// <summary>
     /// Cria um novo item colecionável.
@@ -57,17 +62,18 @@ public class Item : IGameEntity
         Name = name;
         _texture = texture;
         Position = position;
+        // Cada item tem velocidade de bob ligeiramente diferente pra parecer natural
+        _bobSpeed = 3f + (position.X * 0.1f % 2f);
     }
 
     /// <summary>
-    /// Atualiza o item. Por enquanto não faz nada,
-    /// mas poderia ter animação de flutuar/brilhar.
+    /// Atualiza o item com animacao de flutuacao.
     /// </summary>
     public void Update(GameTime gameTime)
     {
-        // TODO: Animação de bobbing (subir e descer suavemente)
-        // float yOffset = (float)System.Math.Sin(gameTime.TotalGameTime.TotalSeconds * 5) * 2;
-        // Isso faria o item flutuar, mas por enquanto fica parado mesmo
+        if (!IsActive) return;
+        _bobTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+        _bobOffset = (float)System.Math.Sin(_bobTimer * _bobSpeed) * 2f;
     }
 
     /// <summary>
@@ -75,8 +81,7 @@ public class Item : IGameEntity
     /// </summary>
     public void Draw(SpriteBatch spriteBatch)
     {
-        // Só desenha se ainda não foi coletado
         if (IsActive)
-            spriteBatch.Draw(_texture, Position, Color.White);
+            spriteBatch.Draw(_texture, new Vector2(Position.X, Position.Y + _bobOffset), Color.White);
     }
 }

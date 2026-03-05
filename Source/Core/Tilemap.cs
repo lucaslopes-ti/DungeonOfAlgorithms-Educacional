@@ -115,17 +115,24 @@ public class Tilemap
 
     /// <summary>
     /// Verifica se um retângulo colide com algum tile sólido.
-    /// Checa os 4 cantos do retângulo.
+    /// Checa TODOS os tiles que o retângulo sobrepõe (não só os cantos).
     /// </summary>
-    /// <param name="bounds">O retângulo de colisão</param>
-    /// <returns>true se colidiu com parede</returns>
     public bool IsColliding(Rectangle bounds)
     {
-        // Verifica os 4 cantos do bounding box
-        return IsSolid(bounds.Left, bounds.Top) ||           // Canto superior esquerdo
-               IsSolid(bounds.Right - 1, bounds.Top) ||      // Canto superior direito
-               IsSolid(bounds.Left, bounds.Bottom - 1) ||    // Canto inferior esquerdo
-               IsSolid(bounds.Right - 1, bounds.Bottom - 1); // Canto inferior direito
+        int startCol = bounds.Left / _tileWidth;
+        int endCol = (bounds.Right - 1) / _tileWidth;
+        int startRow = bounds.Top / _tileHeight;
+        int endRow = (bounds.Bottom - 1) / _tileHeight;
+
+        for (int row = startRow; row <= endRow; row++)
+        {
+            for (int col = startCol; col <= endCol; col++)
+            {
+                if (IsSolid(col * _tileWidth, row * _tileHeight))
+                    return true;
+            }
+        }
+        return false;
     }
 
     /// <summary>

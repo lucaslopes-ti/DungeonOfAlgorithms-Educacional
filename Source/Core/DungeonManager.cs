@@ -35,6 +35,41 @@ public class DungeonManager
     private DungeonManager() { }
 
     /// <summary>
+    /// Conta o total de moedas (Coins) em todas as salas do dungeon.
+    /// </summary>
+    public int TotalCoins
+    {
+        get
+        {
+            int total = 0;
+            foreach (var room in Rooms.Values)
+                foreach (var item in room.Items)
+                    if (item is not DungeonOfAlgorithms.Source.Entities.ChestItem)
+                        total++;
+            return total;
+        }
+    }
+
+    /// <summary>
+    /// Conta quantas moedas ja foram coletadas (IsActive == false).
+    /// </summary>
+    public int CollectedCoins
+    {
+        get
+        {
+            int collected = 0;
+            foreach (var room in Rooms.Values)
+                foreach (var item in room.Items)
+                    if (item is not DungeonOfAlgorithms.Source.Entities.ChestItem && !item.IsActive)
+                        collected++;
+            return collected;
+        }
+    }
+
+    /// <summary>Todas as moedas foram coletadas?</summary>
+    public bool AllCoinsCollected => CollectedCoins >= TotalCoins && TotalCoins > 0;
+
+    /// <summary>
     /// Adiciona uma sala ao dungeon.
     /// </summary>
     /// <param name="room">A sala a ser adicionada</param>
@@ -119,10 +154,9 @@ public class DungeonManager
             string[] values = lines[y].Split(',');
             for (int x = 0; x < width; x++)
             {
-                if (int.TryParse(values[x], out int tileIndex))
+                if (int.TryParse(values[x].Trim(), out int tileIndex))
                 {
-                    // Tiled exporta -1 pra tiles vazios, tratamos como 0
-                    mapData[y, x] = tileIndex < 0 ? 0 : tileIndex;
+                    mapData[y, x] = tileIndex;
                 }
             }
         }
