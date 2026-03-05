@@ -137,7 +137,7 @@ public class Game1 : Game
         room2.AddItem(ItemFactory.CreateItem("Coin", new Vector2(100, 100)));
         room2.AddItem(ItemFactory.CreateItem("Coin", new Vector2(200, 150)));
         room2.AddItem(ItemFactory.CreateItem("Coin", new Vector2(350, 200)));
-        room2.AddItem(ItemFactory.CreateItem("Coin", new Vector2(150, 250)));
+        room2.AddItem(ItemFactory.CreateItem("Coin", new Vector2(250, 60)));
         room2.AddItem(ItemFactory.CreateItem("Coin", new Vector2(400, 100)));
 
         room3.AddItem(ItemFactory.CreateItem("Coin", new Vector2(100, 150)));

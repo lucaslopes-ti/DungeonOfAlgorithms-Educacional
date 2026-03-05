@@ -84,7 +84,7 @@ public class Player : IGameEntity
     /// Área de colisão do player. Menor que o sprite pra ser mais justo.
     /// Ninguém gosta de hitbox injusta!
     /// </summary>
-    public Rectangle Bounds => new Rectangle((int)Position.X + 8, (int)Position.Y + 16, 16, 16);
+    public Rectangle Bounds => new Rectangle((int)Position.X + 9, (int)Position.Y + 17, 14, 14);
 
     /// <summary>
     /// Cria um novo player.
@@ -212,15 +212,15 @@ public class Player : IGameEntity
         if (tilemap != null)
         {
             // Tenta mover em X separadamente
-            Rectangle xBounds = new Rectangle((int)newPosition.X + 8, (int)Position.Y + 16, 16, 16);
+            Rectangle xBounds = new Rectangle((int)newPosition.X + 9, (int)Position.Y + 17, 14, 14);
             if (!tilemap.IsColliding(xBounds))
             {
                 Position = new Vector2(newPosition.X, Position.Y);
             }
-            
+
             // Tenta mover em Y separadamente
             // Isso permite "deslizar" nas paredes em vez de travar
-            Rectangle yBounds = new Rectangle((int)Position.X + 8, (int)newPosition.Y + 16, 16, 16);
+            Rectangle yBounds = new Rectangle((int)Position.X + 9, (int)newPosition.Y + 17, 14, 14);
             if (!tilemap.IsColliding(yBounds))
             {
                 Position = new Vector2(Position.X, newPosition.Y);

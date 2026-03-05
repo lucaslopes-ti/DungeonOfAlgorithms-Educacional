@@ -35,19 +35,19 @@ public class Item : IGameEntity
     /// <summary>Quanto vale em pontos. Dinheiro = felicidade.</summary>
     public int Value { get; private set; } = 10;
     
-    // 🖼️ Textura do item
-    private Texture2D _texture;
+    // Textura do item
+    protected Texture2D _texture;
 
     // Animacao de flutuacao
     private float _bobTimer = 0f;
-    private float _bobOffset = 0f;
+    protected float _bobOffset = 0f;
     private float _bobSpeed;
 
     /// <summary>
     /// Área de colisão do item, baseada no tamanho real da textura.
     /// Se o player encostar, coleta!
     /// </summary>
-    public Rectangle Bounds => new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height);
+    public virtual Rectangle Bounds => new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height);
 
     /// <summary>
     /// Cria um novo item colecionável.
@@ -79,7 +79,7 @@ public class Item : IGameEntity
     /// <summary>
     /// Desenha o item na tela (se ainda estiver ativo).
     /// </summary>
-    public void Draw(SpriteBatch spriteBatch)
+    public virtual void Draw(SpriteBatch spriteBatch)
     {
         if (IsActive)
             spriteBatch.Draw(_texture, new Vector2(Position.X, Position.Y + _bobOffset), Color.White);

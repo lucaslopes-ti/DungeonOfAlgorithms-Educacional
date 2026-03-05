@@ -107,10 +107,17 @@ public class Tilemap
     /// </summary>
     public bool IsSolid(int worldX, int worldY)
     {
-        int tile = GetTileAt(worldX, worldY);
-        // Fora do mapa = sólido (parede invisível)
-        // Tile no HashSet = sólido
-        return tile < 0 || SolidTiles.Contains(tile);
+        int tileX = worldX / _tileWidth;
+        int tileY = worldY / _tileHeight;
+
+        // Fora do mapa = solido (parede invisivel)
+        if (tileX < 0 || tileY < 0 || tileY >= _mapData.GetLength(0) || tileX >= _mapData.GetLength(1))
+            return true;
+
+        int tile = _mapData[tileY, tileX];
+        // Void tiles (-1) = passavel (area de transicao entre salas)
+        if (tile < 0) return false;
+        return SolidTiles.Contains(tile);
     }
 
     /// <summary>
