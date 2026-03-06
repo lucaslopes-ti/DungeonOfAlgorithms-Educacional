@@ -52,8 +52,8 @@ public class HUD
         spriteBatch.DrawString(_font, coinText, new Vector2(13, 56), coinColor);
 
         // Nome da sala
-        string[] roomNames = { "", "The Stack", "The Heap", "Kernel Panic" };
-        string roomName = currentRoom.Id >= 1 && currentRoom.Id <= 3 ? roomNames[currentRoom.Id] : $"Room {currentRoom.Id}";
+        string[] roomNames = { "", "The Stack", "The Heap", "The Cache", "The Pipeline", "The Firewall", "Kernel Panic" };
+        string roomName = currentRoom.Id >= 1 && currentRoom.Id <= 6 ? roomNames[currentRoom.Id] : $"Room {currentRoom.Id}";
         string roomText = $"Room {currentRoom.Id}: {roomName}";
         spriteBatch.DrawString(_font, roomText, new Vector2(13, 76), Color.LightGray * 0.8f);
     }

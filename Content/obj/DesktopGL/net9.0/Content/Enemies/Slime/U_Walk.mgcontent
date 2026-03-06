@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>C:/Users/Lucas/DungeonOfAlgorithms-Educacional/Content/Enemies/Slime/U_Walk.png</SourceFile>
-  <SourceTime>2026-02-01T16:37:57.2974898-03:00</SourceTime>
-  <DestFile>C:/Users/Lucas/DungeonOfAlgorithms-Educacional/Content/bin/DesktopGL/Content/Enemies/Slime/U_Walk.xnb</DestFile>
-  <DestTime>2026-03-05T12:40:19.6492236-03:00</DestTime>
+  <SourceFile>/Users/lucaslopes/DungeonOfAlgorithms-Educacional-1/Content/Enemies/Slime/U_Walk.png</SourceFile>
+  <SourceTime>2026-02-05T14:40:34.3842977-03:00</SourceTime>
+  <DestFile>/Users/lucaslopes/DungeonOfAlgorithms-Educacional-1/Content/bin/DesktopGL/Content/Enemies/Slime/U_Walk.xnb</DestFile>
+  <DestTime>2026-03-04T00:02:16.0673849-03:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2025-10-20T11:25:32-03:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
